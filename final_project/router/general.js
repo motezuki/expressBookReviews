@@ -73,12 +73,20 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
   let title = req.params.title;
   var list = [];
-  for (key in books){
-    if (books[key].title === title){
-      list.push(books[key]);
+  new Promise((resolve,reject) => {
+    resolve(title);
+  })
+  .then((title) => {
+    for (key in books){
+      if (books[key].title === title){
+        list.push(books[key]);
+      }
     }
-  }
-  return res.send(JSON.stringify(list, null, 4));
+    res.send(JSON.stringify(list, null, 4));
+  })
+  .catch((err) => {
+    res.status(500).send("Error retrieving book");
+  });
 });
 
 //  Get book review
