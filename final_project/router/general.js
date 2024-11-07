@@ -53,12 +53,20 @@ public_users.get('/isbn/:isbn',function (req, res) {
 public_users.get('/author/:author',function (req, res) {
   let author = req.params.author;
   var list = [];
-  for (key in books){
-    if (books[key].author === author){
-      list.push(books[key]);
+  new Promise((resolve, reject) => {
+    resolve(author);
+  })
+  .then((author) => {
+    for (key in books){
+      if (books[key].author === author){
+        list.push(books[key]);
+      }
     }
-  }
-  return res.send(JSON.stringify(list, null, 4));
+    return res.send(JSON.stringify(list, null, 4));
+  })
+  .catch((err) => {
+    res.status(500).send("Error retrieving book");
+  });
 });
 
 // Get all books based on title
